@@ -9,10 +9,14 @@ use Symfony\Component\Uid\Uuid;
 
 class MessageService
 {
-    const MESSAGE_FILE_PATH = FILES_DIRECTORY . '/messages.txt';
+    const MESSAGE_FILE_PATH = FILES_DIRECTORY.'/messages.txt';
 
-    public function __construct(private readonly MessageRepository $messageRepository) {}
-    public function createAndAddToFile(Message $message): Message {
+    public function __construct(private readonly MessageRepository $messageRepository)
+    {
+    }
+
+    public function createAndAddToFile(Message $message): Message
+    {
         $this->messageRepository->save($message);
         $this->addMessageToFile($message);
         return $message;
@@ -34,13 +38,15 @@ class MessageService
         return $jsonData;
     }
 
-    public function getMessageByUuid(string $id): ?Message {
+    public function getMessageByUuid(string $id): ?Message
+    {
         $id = Uuid::fromString($id);
         return $this->messageRepository->find($id);
     }
 
-    private function addMessageToFile(Message $message): void {
-        $messageToAdd = $message->getCreatedAt()->format('Y-m-d H:i:s') . "\t" . $message->getContent() . "\n";
+    private function addMessageToFile(Message $message): void
+    {
+        $messageToAdd = $message->getCreatedAt()->format('Y-m-d H:i:s')."\t".$message->getContent()."\n";
 
         $filesystem = new Filesystem();
 
